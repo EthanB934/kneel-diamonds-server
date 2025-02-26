@@ -58,3 +58,21 @@ def retrieve_metal(primary_key):
         serialized_python_to_JSON = json.dumps(query_as_dictionary)
 
         return serialized_python_to_JSON
+
+
+def update_metal(primary_key, replacement_data):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Metals
+                SET
+                    metal = ?,
+                    price =  ?
+            WHERE Id = ?
+            """,
+            (replacement_data["metal"], replacement_data["price"], primary_key),
+        )
+
+        return True if db_cursor.rowcount > 0 else False

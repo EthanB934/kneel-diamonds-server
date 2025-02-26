@@ -47,3 +47,21 @@ def retrieve_style(primary_key):
         requested_data_as_dictionary = dict(requested_data)
         requested_data_as_json = json.dumps(requested_data_as_dictionary)
         return requested_data_as_json
+
+
+def update_style(primary_key, replacement_data):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Styles
+                SET
+                    style = ?,
+                    price = ?
+            WHERE Id = ?
+                """,
+            (replacement_data["style"], replacement_data["price"], primary_key),
+        )
+        return True if db_cursor.rowcount > 0 else False
