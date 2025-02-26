@@ -42,9 +42,9 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
         if url["requested_resource"] == "orders":
             if url["primary_key"] != 0:
-                response_body = retrieve_order(url["primary_key"])
+                response_body = retrieve_order(url)
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
-            response_body = list_orders()
+            response_body = list_orders(url)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
     def do_PUT(self):
