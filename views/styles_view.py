@@ -65,3 +65,15 @@ def update_style(primary_key, replacement_data):
             (replacement_data["style"], replacement_data["price"], primary_key),
         )
         return True if db_cursor.rowcount > 0 else False
+
+
+def create_style(new_style_data):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                INSERT INTO Styles VALUES (null, ?, ?)
+            """,
+            (new_style_data["style"], new_style_data["price"]),
+        )

@@ -76,3 +76,15 @@ def update_metal(primary_key, replacement_data):
         )
 
         return True if db_cursor.rowcount > 0 else False
+
+
+def create_metal(new_metal_data):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                INSERT INTO Metals (metal, price) VALUES (?, ?)
+            """,
+            (new_metal_data["metal"], new_metal_data["price"]),
+        )

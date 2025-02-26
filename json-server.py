@@ -9,10 +9,10 @@ from http.server import HTTPServer
 from nss_handler import HandleRequests, status
 
 # Import functions that will be upon request
-from views import list_metals, retrieve_metal, update_metal
-from views import list_styles, retrieve_style, update_style
-from views import list_sizes, retrieve_size, update_size
-from views import list_orders, retrieve_order, update_order
+from views import list_metals, retrieve_metal, update_metal, create_metal
+from views import list_styles, retrieve_style, update_style, create_style
+from views import list_sizes, retrieve_size, update_size, create_size
+from views import list_orders, retrieve_order, update_order, create_order
 
 # The database has been created, now we have to make the data accessible to the client.
 
@@ -87,6 +87,30 @@ class JSONServer(HandleRequests):
                 # Was the update successful?
                 if updated_order:
                     return self.response("", status.HTTP_200_SUCCESS.value)
+
+    def do_POST(self):
+        response_body = ""
+        url = self.parse_url(self.path)
+
+        # Creates a new resource in database
+        # Request body is required
+
+        content_len = int(self.headers.get("content-length", 0))
+        request_body = self.rfile.read(content_len)
+        request_body = json.loads(request_body)
+
+        if url["requested_resource"] == "metals":
+            create_metal(request_body)
+            return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+        if url["requested_resource"] == "styles":
+            create_style(request_body)
+            return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+        if url["requested_resource"] == "sizes":
+            create_size(request_body)
+            return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+        if url["requested_resource"] == "orders":
+            create_order(request_body)
+            return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
 
 def main():

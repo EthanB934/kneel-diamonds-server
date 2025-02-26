@@ -64,3 +64,15 @@ def update_size(primary_key, replacement_data):
             (replacement_data["size"], replacement_data["price"], primary_key),
         )
         return True if db_cursor.rowcount > 0 else False
+
+
+def create_size(new_size_data):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                INSERT INTO Sizes VALUES (null, ?, ?)
+            """,
+            (new_size_data["size"], new_size_data["price"]),
+        )

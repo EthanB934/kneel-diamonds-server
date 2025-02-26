@@ -72,3 +72,19 @@ def update_order(primary_key, replacement_data):
             ),
         )
         return True if db_cursor.rowcount > 0 else False
+
+
+def create_order(new_order_data):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+                INSERT INTO Orders VALUES (null, ?, ?, ?)
+            """,
+            (
+                new_order_data["metal_id"],
+                new_order_data["style_id"],
+                new_order_data["size_id"],
+            ),
+        )
