@@ -88,3 +88,20 @@ def create_order(new_order_data):
                 new_order_data["size_id"],
             ),
         )
+
+
+def delete_order(primary_key):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            DELETE FROM Orders
+                WHERE Id = ?
+                """,
+            (primary_key,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+        return True if number_of_rows_deleted > 0 else False

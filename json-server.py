@@ -9,10 +9,10 @@ from http.server import HTTPServer
 from nss_handler import HandleRequests, status
 
 # Import functions that will be upon request
-from views import list_metals, retrieve_metal, update_metal, create_metal
-from views import list_styles, retrieve_style, update_style, create_style
-from views import list_sizes, retrieve_size, update_size, create_size
-from views import list_orders, retrieve_order, update_order, create_order
+from views import list_metals, retrieve_metal, update_metal, create_metal, delete_metal
+from views import list_styles, retrieve_style, update_style, create_style, delete_style
+from views import list_sizes, retrieve_size, update_size, create_size, delete_size
+from views import list_orders, retrieve_order, update_order, create_order, delete_order
 
 # The database has been created, now we have to make the data accessible to the client.
 
@@ -111,6 +111,31 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "orders":
             create_order(request_body)
             return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+    def do_DELETE(self):
+        response_body = ""
+        url = self.parse_url(self.path)
+
+        if url["requested_resource"] == "metals":
+            if url["primary_key"] != 0:
+                successfully_deleted = delete_metal(url["primary_key"])
+                if successfully_deleted:
+                    return self.response("", status.HTTP_200_SUCCESS.value)
+        if url["requested_resource"] == "styles":
+            if url["primary_key"] != 0:
+                successfully_deleted = delete_style(url["primary_key"])
+                if successfully_deleted:
+                    return self.response("", status.HTTP_200_SUCCESS.value)
+        if url["requested_resource"] == "sizes":
+            if url["primary_key"] != 0:
+                successfully_deleted = delete_size(url["primary_key"])
+                if successfully_deleted:
+                    return self.response("", status.HTTP_200_SUCCESS.value)
+        if url["requested_resource"] == "orders":
+            if url["primary_key"] != 0:
+                successfully_deleted = delete_order(url["primary_key"])
+                if successfully_deleted:
+                    return self.response("", status.HTTP_200_SUCCESS.value)
 
 
 def main():

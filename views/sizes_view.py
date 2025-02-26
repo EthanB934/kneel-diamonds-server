@@ -76,3 +76,20 @@ def create_size(new_size_data):
             """,
             (new_size_data["size"], new_size_data["price"]),
         )
+
+
+def delete_size(primary_key):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            DELETE FROM Sizes
+                WHERE Id = ?
+                """,
+            (primary_key,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+        return True if number_of_rows_deleted > 0 else False

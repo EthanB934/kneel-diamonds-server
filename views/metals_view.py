@@ -88,3 +88,20 @@ def create_metal(new_metal_data):
             """,
             (new_metal_data["metal"], new_metal_data["price"]),
         )
+
+
+def delete_metal(primary_key):
+    with sqlite3.connect("./kneeldiamonds.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            DELETE FROM Metals
+                WHERE Id = ?
+                """,
+            (primary_key,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+        return True if number_of_rows_deleted > 0 else False
